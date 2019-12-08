@@ -35,11 +35,21 @@ class Point {
 class Trail {
     constructor(instructions) {
         this._path = [];
-        this._path.push(new Point());
+        this._pointRegistry = {};
+
+        this._addToPath(new Point());
 
         if (instructions) {
             this.followInstructions(instructions);
         }
+    }
+    _registerPoint(p) {
+        this._pointRegistry[p.toString()] = true;
+    }
+    _addToPath(p) {
+        this._path.push(p);
+        this._registerPoint(p);
+        //console.log(this._pointRegistry);
     }
     start() {
         return this._path[0];
@@ -51,16 +61,16 @@ class Trail {
         return this._path.length - 1;
     }
     moveRight() {
-        this._path.push(this.end().right());
+        this._addToPath(this.end().right());
     }
     moveLeft() {
-        this._path.push(this.end().left());
+        this._addToPath(this.end().left());
     }
     moveUp() {
-        this._path.push(this.end().up());
+        this._addToPath(this.end().up());
     }
     moveDown() {
-        this._path.push(this.end().down());
+        this._addToPath(this.end().down());
     }
     move(direction) {
         switch (direction) {
@@ -95,42 +105,33 @@ class Trail {
     followInstructions(instructions) {
         const instructionList = this.splitInstructionList(instructions);
         let instruction = {};
-        for(let i = 0; i < instructionList.length; i++) {
+        for (let i = 0; i < instructionList.length; i++) {
             instruction = this.splitInstruction(instructionList[i]);
             for(let j = 0; j < instruction.steps; j++) {
                 this.move(instruction.direction);
             }
         }
     }
+    isPointOnTrail(p) {
+        return this._pointRegistry[p.toString()] === true ? true : false;
+    }
     stepsToPoint(p) {
-        for(let i = 0; i < this._path.length; i++) {
-            if (this._path[i].equals(p)) {
-                return i;
+        if (this.isPointOnTrail(p)) {
+            for(let i = 0; i < this._path.length; i++) {
+                if (this._path[i].equals(p)) {
+                    return i;
+                }
             }
         }
         return false;
     }
     intersections(t) {
         let intersections = [];
-        let results = [];
-        let result = false;
         // start the test from index 1 to avoid the origin point
-        for(let i = 1; i < this._path.length; i++) {
-
-            //this is slower but respects the privacy of the Trail members
-            // results = t.walk(p => p.equals(this._path[i]));
-            // result = results.reduce(((total, r) => total || r), false);
-
-            //this is faster but calls directly to the _path array of the other Trail
-            result = false;
-            for(let j = 1; j < t._path.length; j++) {
-                if (this._path[i].equals(t._path[j])) {
-                    result = true;
-                    break;
-                }
+        for (let i = 1; i < this._path.length; i++) {
+            if (t.stepsToPoint(this._path[i])) {
+                intersections.push(this._path[i]);
             }
-
-            if (result) intersections.push(this._path[i]);
         }
         return intersections;
     }

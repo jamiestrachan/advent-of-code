@@ -145,6 +145,16 @@ test('walking a Trail', () => {
     t.followInstructions("R3");
     expect(t.walk(p => p.toString())).toStrictEqual(["0,0","1,0","2,0","3,0"]);
 });
+test('checking if a Point is on a Trail', () => {
+    const t1 = new day3.Trail("R3");
+    expect(t1.isPointOnTrail(new day3.Point(0,0))).toBe(true);
+    expect(t1.isPointOnTrail(new day3.Point(1,0))).toBe(true);
+    expect(t1.isPointOnTrail(new day3.Point(3,0))).toBe(true);
+    expect(t1.isPointOnTrail(new day3.Point(4,0))).toBe(false);
+    expect(t1.isPointOnTrail(new day3.Point(5,0))).toBe(false);
+    expect(t1.isPointOnTrail(new day3.Point(0,1))).toBe(false);
+    expect(t1.isPointOnTrail(new day3.Point(10,10))).toBe(false);
+});
 test('finding Trail intersections', () => {
     const t1 = new day3.Trail();
     const t2 = new day3.Trail();
@@ -171,9 +181,9 @@ test('finding closest Trail intersection', () => {
     expect(t5.shortestIntersectionDistance(t6)).toBe(135);
 
     // this test takes a while
-    // const t7 = new day3.Trail(day3.line1);
-    // const t8 = new day3.Trail(day3.line2);
-    // expect(t7.shortestIntersectionDistance(t8)).toBe(627);
+    const t7 = new day3.Trail(day3.line1);
+    const t8 = new day3.Trail(day3.line2);
+    expect(t7.shortestIntersectionDistance(t8)).toBe(627);
 });
 test('steps to Point on Trail', () => {
     const t1 = new day3.Trail("R8,U5,L5,D3");
@@ -201,7 +211,7 @@ test('finding shortest Trail intersection', () => {
     expect(t5.fewestIntersectionSteps(t6)).toBe(410);
 
     // this test takes a while
-    // const t7 = new day3.Trail(day3.line1);
-    // const t8 = new day3.Trail(day3.line2);
-    // expect(t7.fewestIntersectionSteps(t8)).toBe(13190);
+    const t7 = new day3.Trail(day3.line1);
+    const t8 = new day3.Trail(day3.line2);
+    expect(t7.fewestIntersectionSteps(t8)).toBe(13190);
 });
