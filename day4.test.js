@@ -26,3 +26,28 @@ test('validate six-digit number', () => {
     expect(day4.isSixDigits(123456)).toBe(true);
     expect(day4.isSixDigits(1234567)).toBe(false);
 });
+
+test('contains adjacent matching digits', () => {
+    expect(day4.hasMatchingAdjacentDigits).toBeDefined();
+    expect(day4.hasMatchingAdjacentDigits(1)).toBe(false);
+    expect(day4.hasMatchingAdjacentDigits(11)).toBe(true);
+    expect(day4.hasMatchingAdjacentDigits(123)).toBe(false);
+    expect(day4.hasMatchingAdjacentDigits(3112)).toBe(true);
+    expect(day4.hasMatchingAdjacentDigits(9876543211)).toBe(true);
+    expect(day4.hasMatchingAdjacentDigits(111111)).toBe(true);
+    expect(day4.hasMatchingAdjacentDigits(223450)).toBe(true);
+    expect(day4.hasMatchingAdjacentDigits(123789)).toBe(false);
+
+});
+
+test('increasing digits', () => {
+    expect(day4.hasAscendingDigits).toBeDefined();
+    expect(day4.hasAscendingDigits(1)).toBe(true);
+    expect(day4.hasAscendingDigits(11)).toBe(true);
+    expect(day4.hasAscendingDigits(123)).toBe(true);
+    expect(day4.hasAscendingDigits(232456)).toBe(false);
+    expect(day4.hasAscendingDigits(99)).toBe(true);
+    expect(day4.hasAscendingDigits(111111)).toBe(true);
+    expect(day4.hasAscendingDigits(223450)).toBe(false);
+    expect(day4.hasAscendingDigits(123789)).toBe(true);
+});

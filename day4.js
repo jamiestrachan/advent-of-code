@@ -18,7 +18,25 @@ function isSixDigits(num) {
     return (num.toString().length === 6);
 }
 
+function hasMatchingAdjacentDigits(num) {
+    const digits = num.toString().split("");
+    for (let i = 1; i < digits.length; i++) {
+        if (digits[i-1] === digits[i]) return true;
+    }
+    return false;
+}
+
+function hasAscendingDigits(num) {
+    const digits = num.toString().split("");
+    for (let i = 1; i < digits.length; i++) {
+        if (digits[i-1] > digits[i]) return false;
+    }
+    return true;
+}
+
 module.exports = {
     isSixDigits: isSixDigits,
+    hasMatchingAdjacentDigits: hasMatchingAdjacentDigits,
+    hasAscendingDigits: hasAscendingDigits,
 };
 
