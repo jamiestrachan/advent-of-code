@@ -26,6 +26,21 @@ function hasMatchingAdjacentDigits(num) {
     return false;
 }
 
+function hasTwoMatchingAdjacentDigits(num) {
+    const digits = num.toString().split("");
+    let streak = 1;
+    for (let i = 1; i < digits.length; i++) {
+        if (digits[i-1] === digits[i]) {
+            streak++;
+        } else if (streak > 0) {
+            if (streak === 2) return true;
+            streak = 1;
+        }
+    }
+    if (streak === 2) return true;
+    return false;
+}
+
 function hasAscendingDigits(num) {
     const digits = num.toString().split("");
     for (let i = 1; i < digits.length; i++) {
@@ -37,7 +52,7 @@ function hasAscendingDigits(num) {
 function validNumbersInRange(min, max) {
     let validCount = 0;
     for (let num = min; num <= max; num++) {
-        if (isSixDigits(num) && hasMatchingAdjacentDigits(num) && hasAscendingDigits(num)) {
+        if (isSixDigits(num) && hasTwoMatchingAdjacentDigits(num) && hasAscendingDigits(num)) {
             validCount++;
         }
     }
@@ -47,6 +62,7 @@ function validNumbersInRange(min, max) {
 module.exports = {
     isSixDigits: isSixDigits,
     hasMatchingAdjacentDigits: hasMatchingAdjacentDigits,
+    hasTwoMatchingAdjacentDigits: hasTwoMatchingAdjacentDigits,
     hasAscendingDigits: hasAscendingDigits,
     validNumbersInRange: validNumbersInRange,
 };

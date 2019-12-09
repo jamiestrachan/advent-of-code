@@ -40,6 +40,18 @@ test('contains adjacent matching digits', () => {
 
 });
 
+test('contains two adjacent matching digits', () => {
+    expect(day4.hasTwoMatchingAdjacentDigits).toBeDefined();
+    expect(day4.hasTwoMatchingAdjacentDigits(1)).toBe(false);
+    expect(day4.hasTwoMatchingAdjacentDigits(11)).toBe(true);
+    expect(day4.hasTwoMatchingAdjacentDigits(123)).toBe(false);
+    expect(day4.hasTwoMatchingAdjacentDigits(31112)).toBe(false);
+    expect(day4.hasTwoMatchingAdjacentDigits(9876543211)).toBe(true);
+    expect(day4.hasTwoMatchingAdjacentDigits(111111)).toBe(false);
+    expect(day4.hasTwoMatchingAdjacentDigits(223450)).toBe(true);
+    expect(day4.hasTwoMatchingAdjacentDigits(123789)).toBe(false);
+});
+
 test('increasing digits', () => {
     expect(day4.hasAscendingDigits).toBeDefined();
     expect(day4.hasAscendingDigits(1)).toBe(true);
@@ -55,6 +67,10 @@ test('increasing digits', () => {
 test('valid numbers in range', () => {
     expect(day4.validNumbersInRange).toBeDefined();
     expect(day4.validNumbersInRange(1,10)).toBe(0);
-    expect(day4.validNumbersInRange(111110,111112)).toBe(2);
-    expect(day4.validNumbersInRange(136818,685979)).toBe(1919);
+    expect(day4.validNumbersInRange(111110,111112)).toBe(0);
+    expect(day4.validNumbersInRange(112233,112233)).toBe(1);
+    expect(day4.validNumbersInRange(123444,123444)).toBe(0);
+    expect(day4.validNumbersInRange(111122,111122)).toBe(1);
+    // expect(day4.validNumbersInRange(136818,685979)).toBe(1919);
+    expect(day4.validNumbersInRange(136818,685979)).toBe(1291);
 });
