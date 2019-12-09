@@ -51,3 +51,10 @@ test('increasing digits', () => {
     expect(day4.hasAscendingDigits(223450)).toBe(false);
     expect(day4.hasAscendingDigits(123789)).toBe(true);
 });
+
+test('valid numbers in range', () => {
+    expect(day4.validNumbersInRange).toBeDefined();
+    expect(day4.validNumbersInRange(1,10)).toBe(0);
+    expect(day4.validNumbersInRange(111110,111112)).toBe(2);
+    expect(day4.validNumbersInRange(136818,685979)).toBe(1919);
+});

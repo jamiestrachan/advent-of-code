@@ -34,9 +34,20 @@ function hasAscendingDigits(num) {
     return true;
 }
 
+function validNumbersInRange(min, max) {
+    let validCount = 0;
+    for (let num = min; num <= max; num++) {
+        if (isSixDigits(num) && hasMatchingAdjacentDigits(num) && hasAscendingDigits(num)) {
+            validCount++;
+        }
+    }
+    return validCount;
+};
+
 module.exports = {
     isSixDigits: isSixDigits,
     hasMatchingAdjacentDigits: hasMatchingAdjacentDigits,
     hasAscendingDigits: hasAscendingDigits,
+    validNumbersInRange: validNumbersInRange,
 };
 
