@@ -50,3 +50,27 @@ test('expect test data to work', () => {
 test('expect day1.rollingDepthChange', () => {
     expect(day1.rollingDepthChange()).toBeDefined();
 });
+
+test('expect zero value results from day1.rollingDepthChange', () => {
+    expect(day1.rollingDepthChange([])).toBe(0);
+    expect(day1.rollingDepthChange([0])).toBe(0);
+    expect(day1.rollingDepthChange([1])).toBe(0);
+    expect(day1.rollingDepthChange([100])).toBe(0);
+    expect(day1.rollingDepthChange([1,2])).toBe(0);
+    expect(day1.rollingDepthChange([1,2,3])).toBe(0);
+    expect(day1.rollingDepthChange([3,2,1])).toBe(0);
+    expect(day1.rollingDepthChange([2,1])).toBe(0);
+    expect(day1.rollingDepthChange([1,1])).toBe(0);
+    expect(day1.rollingDepthChange([1,1,1])).toBe(0);
+});
+
+test('expect increase detection day1.rollingDepthChange', () => {
+    expect(day1.rollingDepthChange([1,2,3,4])).toBe(1);
+    expect(day1.rollingDepthChange([1,2,3,4,5])).toBe(2);
+    expect(day1.rollingDepthChange([5,4,3,2,1,2,3,4,5])).toBe(3);
+});
+
+test('expect test data to work', () => {
+    expect(day1.rollingDepthChange(example_depths)).toBe(5);
+    expect(day1.rollingDepthChange(test_depths)).toBe(1252);
+});
