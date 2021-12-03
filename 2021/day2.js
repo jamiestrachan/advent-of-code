@@ -6,32 +6,50 @@ https://adventofcode.com/2021/day/2#part2
 class Submarine {
     #h = 0;
     #d = 0;
+    #a = 0;
 
     get horizontal() { return this.#h; }
     get depth() { return this.#d; }
+    get aim() { return this.#a; }
     get position() { return this.#h * this.#d; }
 
-    moveForward(steps) {
+    aimDown(steps) {
         if (isNaN(steps)) return false;
 
-        this.#h += steps;
+        this.#a += steps;
         return true;
     }
-    moveDown(steps) {
+    aimUp(steps) {
+        if (isNaN(steps)) return false;
+
+        this.#a -= steps;
+        return true;
+    }
+    changeDepth(steps) {
         if (isNaN(steps)) return false;
 
         this.#d += steps;
-        return true;
-    }
-    moveUp(steps) {
-        if (isNaN(steps)) return false;
-
-        this.#d -= steps;
         if (this.#d < 0) {
             this.#d = 0;
             return false;
         }
         return true;
+    }
+    moveDown(steps) {
+        if (isNaN(steps)) return false;
+
+        return this.changeDepth(steps);
+    }
+    moveUp(steps) {
+        if (isNaN(steps)) return false;
+
+        return this.changeDepth(steps * -1);
+    }
+    moveForward(steps) {
+        if (isNaN(steps)) return false;
+
+        this.#h += steps;
+        return this.changeDepth(this.#a * steps);
     }
 
     followInstruction(instruction) {
@@ -45,9 +63,9 @@ class Submarine {
                 case 'forward':
                     return this.moveForward(steps);
                 case 'down':
-                    return this.moveDown(steps);
+                    return this.aimDown(steps);
                 case 'up':
-                    return this.moveUp(steps); 
+                    return this.aimUp(steps); 
             }
         }
         return false;

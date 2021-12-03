@@ -21,25 +21,31 @@ test('expect Submarine class to exist with defaults', () => {
     expect(sub.position).toBe(0);
 });
 
-test('move Submarine forward', () => {
+test('move Submarine forward horizontally', () => {
     const sub = new day2.Submarine();
     expect(sub.moveForward).toBeDefined();
     expect(sub.horizontal).toBe(0);
+    expect(sub.depth).toBe(0);
     
     expect(sub.moveForward(0)).toBe(true);
     expect(sub.horizontal).toBe(0);
+    expect(sub.depth).toBe(0);
     
     expect(sub.moveForward(1)).toBe(true);
     expect(sub.horizontal).toBe(1);
+    expect(sub.depth).toBe(0);
     
     expect(sub.moveForward("x")).toBe(false);
     expect(sub.horizontal).toBe(1);
+    expect(sub.depth).toBe(0);
     
     expect(sub.moveForward(10)).toBe(true);
     expect(sub.horizontal).toBe(11);
+    expect(sub.depth).toBe(0);
     
     expect(sub.moveForward()).toBe(false);
     expect(sub.horizontal).toBe(11);
+    expect(sub.depth).toBe(0);
 });
 
 test('adjust Submarine depth', () => {
@@ -83,6 +89,91 @@ test('adjust Submarine depth', () => {
 
     expect(sub.moveUp(10)).toBe(false); //this would put us above 0
     expect(sub.depth).toBe(0);
+});
+
+
+test('adjust Submarine aim', () => {
+    const sub = new day2.Submarine();
+    expect(sub.aimDown).toBeDefined();
+    expect(sub.aimUp).toBeDefined();
+    expect(sub.aim).toBe(0);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimDown()).toBe(false);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(0);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimDown("x")).toBe(false);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(0);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimUp()).toBe(false);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(0);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimUp("x")).toBe(false);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(0);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimDown(1)).toBe(true);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(1);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimUp(1)).toBe(true);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(0);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimDown(10)).toBe(true);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(10);
+    expect(sub.depth).toBe(0);
+
+    expect(sub.aimUp(20)).toBe(true);
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(-10);
+    expect(sub.depth).toBe(0);
+});
+
+test('adjust submarine depth via aim', () => {
+    const sub = new day2.Submarine();
+    expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(0);
+    expect(sub.depth).toBe(0);
+    expect(sub.position).toBe(0);
+
+    expect(sub.aimDown(5)).toBe(true);
+    expect(sub.moveForward(5)).toBe(true);
+    expect(sub.horizontal).toBe(5);
+    expect(sub.aim).toBe(5);
+    expect(sub.depth).toBe(25);
+    expect(sub.position).toBe(125);
+
+    expect(sub.aimDown(5)).toBe(true);
+    expect(sub.moveForward(5)).toBe(true);
+    expect(sub.horizontal).toBe(10);
+    expect(sub.aim).toBe(10);
+    expect(sub.depth).toBe(75); //25 + (10*5)
+    expect(sub.position).toBe(750);
+
+    expect(sub.aimUp(2)).toBe(true);
+    expect(sub.moveForward(10)).toBe(true);
+    expect(sub.horizontal).toBe(20);
+    expect(sub.aim).toBe(8);
+    expect(sub.depth).toBe(155); //75 + (8*10)
+    expect(sub.position).toBe(3100);
+
+    expect(sub.aimUp(28)).toBe(true);
+    expect(sub.moveForward(10)).toBe(false);
+    expect(sub.horizontal).toBe(30);
+    expect(sub.aim).toBe(-20);
+    expect(sub.depth).toBe(0); //155 + (-20 * 10)
+    expect(sub.position).toBe(0);
 });
 
 test('calculate Submarine position', () => {
@@ -132,27 +223,50 @@ test('follow instructions', () => {
     expect(sub.followInstruction("down x")).toBe(false);
     expect(sub.followInstruction("forward x")).toBe(false);
     expect(sub.horizontal).toBe(0);
+    expect(sub.aim).toBe(0);
     expect(sub.depth).toBe(0);
     expect(sub.position).toBe(0);
 
     expect(sub.followInstruction("forward 3")).toBe(true);
     expect(sub.horizontal).toBe(3);
+    expect(sub.aim).toBe(0);
     expect(sub.depth).toBe(0);
     expect(sub.position).toBe(0);
 
     expect(sub.followInstruction("down 2")).toBe(true);
     expect(sub.horizontal).toBe(3);
-    expect(sub.depth).toBe(2);
-    expect(sub.position).toBe(6);
+    expect(sub.aim).toBe(2);
+    expect(sub.depth).toBe(0);
+    expect(sub.position).toBe(0);
+
+    expect(sub.followInstruction("forward 3")).toBe(true);
+    expect(sub.horizontal).toBe(6);
+    expect(sub.aim).toBe(2);
+    expect(sub.depth).toBe(6);
+    expect(sub.position).toBe(36);
 
     expect(sub.followInstruction("up 1")).toBe(true);
-    expect(sub.horizontal).toBe(3);
-    expect(sub.depth).toBe(1);
-    expect(sub.position).toBe(3);
+    expect(sub.horizontal).toBe(6);
+    expect(sub.aim).toBe(1);
+    expect(sub.depth).toBe(6);
+    expect(sub.position).toBe(36);
 
-    expect(sub.followInstruction("up 2")).toBe(false); //this instruction would raise depth above 0 so we expect a false
-    expect(sub.horizontal).toBe(3);
-    expect(sub.depth).toBe(0);
+    expect(sub.followInstruction("forward 3")).toBe(true);
+    expect(sub.horizontal).toBe(9);
+    expect(sub.aim).toBe(1);
+    expect(sub.depth).toBe(9); //6 + (1*3)
+    expect(sub.position).toBe(81);
+
+    expect(sub.followInstruction("up 5")).toBe(true);
+    expect(sub.horizontal).toBe(9);
+    expect(sub.aim).toBe(-4);
+    expect(sub.depth).toBe(9);
+    expect(sub.position).toBe(81);
+
+    expect(sub.followInstruction("forward 10")).toBe(false); //this instruction would raise depth above 0 so we expect a false
+    expect(sub.horizontal).toBe(19);
+    expect(sub.aim).toBe(-4);
+    expect(sub.depth).toBe(0); //9 + (-4*10)
     expect(sub.position).toBe(0);
 });
 
@@ -167,21 +281,25 @@ test('follow paths', () => {
 
     expect(sub.followPath(['forward 2'])).toBe(true);
     expect(sub.horizontal).toBe(2);
+    expect(sub.aim).toBe(0);
     expect(sub.depth).toBe(0);
     expect(sub.position).toBe(0);
 
     expect(sub.followPath(['forward 2','down 2'])).toBe(true);
     expect(sub.horizontal).toBe(4);
-    expect(sub.depth).toBe(2);
-    expect(sub.position).toBe(8);
+    expect(sub.aim).toBe(2);
+    expect(sub.depth).toBe(0);
+    expect(sub.position).toBe(0);
 
     expect(sub.followPath(['forward 2','down 2','up 1'])).toBe(true);
     expect(sub.horizontal).toBe(6);
-    expect(sub.depth).toBe(3);
-    expect(sub.position).toBe(18);
+    expect(sub.aim).toBe(3);
+    expect(sub.depth).toBe(4);
+    expect(sub.position).toBe(24);
 
-    expect(sub.followPath(['up 1','up 1','up 10'])).toBe(false);
-    expect(sub.horizontal).toBe(6);
+    expect(sub.followPath(['up 1','up 1','up 10','forward 10'])).toBe(false);
+    expect(sub.horizontal).toBe(16);
+    expect(sub.aim).toBe(-9);
     expect(sub.depth).toBe(0);
     expect(sub.position).toBe(0);
 });
@@ -190,12 +308,12 @@ test('sample input', () => {
     const sub = new Submarine();
 
     expect(sub.followPath(sample_directions)).toBe(true);
-    expect(sub.position).toBe(150);
+    expect(sub.position).toBe(900);
 });
 
 test('test input', () => {
     const sub = new Submarine();
 
     expect(sub.followPath(final_directions)).toBe(true);
-    expect(sub.position).toBe(1840243);
+    expect(sub.position).toBe(1727785422);
 });
