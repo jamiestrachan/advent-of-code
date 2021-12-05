@@ -63,18 +63,32 @@ function calculatePowerConsumption(input) {
     return combineGammaEpsilon(parseInt(gamma, 2), parseInt(epsilon, 2));
 }
 
-function calculateOxygenGeneratorRating(input) {
+
+function calculateRating(input, findComparator) {
     if (!input || !Array.isArray(input)) return false;
-    return false;
+    var values = input;
+    var transposed = [];
+    var index = 0;
+    var comparator = 0;
+    while (values.length > 1) {
+        transposed = transposeBits(values);
+        mostCommon = findComparator(transposed[index]);
+        values = values.filter(word => parseInt(word[index]) === mostCommon);
+        index++;
+    }
+    return values[0];
+}
+
+function calculateOxygenGeneratorRating(input) {
+    return calculateRating(input, mostCommonBit);
 }
 
 function calculateCO2ScrubberRating(input) {
-    if (!input || !Array.isArray(input)) return false;
-    return false;
+    return calculateRating(input, leastCommonBit);
 }
 
 function combineO2CO2(o2, co2) {
-    return false;
+    return parseInt(o2, 2) * parseInt(co2, 2);
 }
 
 function calculateLifeSupportRating(input) {
@@ -97,5 +111,6 @@ module.exports = {
     calculatePowerConsumption: calculatePowerConsumption,
     calculateOxygenGeneratorRating: calculateOxygenGeneratorRating,
     calculateCO2ScrubberRating: calculateCO2ScrubberRating,
+    combineO2CO2: combineO2CO2,
     calculateLifeSupportRating: calculateLifeSupportRating,
 };
