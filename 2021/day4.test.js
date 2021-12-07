@@ -678,7 +678,8 @@ test('scoring Bingo card', () => {
 
 test('run sample data', () => {
     const callList = "7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1";
-    const calls = callList.split(",");
+    let calls = callList.split(",");
+    calls = calls.map(x => parseInt(x));
 
     let cards = [];
     cards.push(new BingoCard("22 13 17 11  0\n8  2 23  4 24\n21  9 14 16  7\n6 10  3 18  5\n1 12 20 15 19"));
@@ -710,9 +711,10 @@ test('run sample data', () => {
     expect(winningNumber * winningCard.score).toBe(4512);
 });
 
-test('run final data', () => {
+test('find first winning card', () => {
     const callList = "14,30,18,8,3,10,77,4,48,67,28,38,63,43,62,12,68,88,54,32,17,21,83,64,97,53,24,2,60,96,86,23,20,93,65,34,45,46,42,49,71,9,61,16,31,1,29,40,59,87,95,41,39,27,6,25,19,58,80,81,50,79,73,15,70,37,92,94,7,55,85,98,5,84,99,26,66,57,82,75,22,89,74,36,11,76,56,33,13,72,35,78,47,91,51,44,69,0,90,52";
-    const calls = callList.split(",");
+    let calls = callList.split(",");
+    calls = calls.map(x => parseInt(x));
 
     const cardList = finalCards.split(/\s*\n\n\s*/);
     const cards = cardList.map(x => new BingoCard(x));
@@ -727,7 +729,6 @@ test('run final data', () => {
 
     for (let x = 0; x < calls.length; x++) {
         for (let c = 0; c < cards.length; c++) {
-            //console.log(`card ${c}`);
             cards[c].call(calls[x]);
             if (cards[c].isWinner) {
                 foundWinner = true;
@@ -741,5 +742,73 @@ test('run final data', () => {
         }
     }
     expect(winningNumber * winningCard.score).toBe(14093);
+
+});
+
+test('find last winning card with sample data', () => {
+    const callList = "7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1";
+    let calls = callList.split(",");
+    calls = calls.map(x => parseInt(x));
+
+    let cards = [];
+    cards.push(new BingoCard("22 13 17 11  0\n8  2 23  4 24\n21  9 14 16  7\n6 10  3 18  5\n1 12 20 15 19"));
+    cards.push(new BingoCard("3 15  0  2 22\n 9 18 13 17  5\n 19  8  7 25 23\n 20 11 10 24  4\n 14 21 16 12  6"));
+    cards.push(new BingoCard("14 21 17 24  4\n 10 16 15  9 19\n 18  8 23 26 20\n 22 11 13  6  5\n 2  0 12  3  7"));
+
+    let losingNumber = -1;
+    let losingCard = -1;
+
+    for (let x = 0; x < calls.length; x++) {
+        console.log(`calling ${calls[x]}`);
+        for (let c = 0; c < cards.length; c++) {
+            cards[c].call(calls[x]);
+        }
+        cards = cards.filter(card => !card.isWinner);
+        if (cards.length === 1) {
+            losingCard = cards[0];
+        } else if (cards.length === 0) {
+            losingNumber = calls[x];
+            break;
+        }
+    }
+
+    console.log(losingNumber, losingCard.toString());
+    expect(losingNumber).toBe(13);
+    expect(losingCard.toString()).toBe("3 15 0 2 22\n9 18 13 17 5\n19 8 7 25 23\n20 11 10 24 4\n14 21 16 12 6");
+    expect(losingNumber * losingCard.score).toBe(1924);
+
+});
+
+
+test('find last winning card with final data', () => {
+    const callList = "14,30,18,8,3,10,77,4,48,67,28,38,63,43,62,12,68,88,54,32,17,21,83,64,97,53,24,2,60,96,86,23,20,93,65,34,45,46,42,49,71,9,61,16,31,1,29,40,59,87,95,41,39,27,6,25,19,58,80,81,50,79,73,15,70,37,92,94,7,55,85,98,5,84,99,26,66,57,82,75,22,89,74,36,11,76,56,33,13,72,35,78,47,91,51,44,69,0,90,52";
+    let calls = callList.split(",");
+    calls = calls.map(x => parseInt(x));
+
+    const cardList = finalCards.split(/\s*\n\n\s*/);
+    let cards = cardList.map(x => new BingoCard(x));
+
+    let losingNumber = -1;
+    let losingCard = -1;
+
+    expect(cards.length).toBe(100);
+    expect(cards[1].toString()).toBe("96 38 62 8 7\n78 50 53 29 81\n88 45 34 58 52\n33 76 13 54 68\n59 95 10 80 63");
+    expect(cards[34].isWinner).toBe(false);
+
+
+    for (let x = 0; x < calls.length; x++) {
+        for (let c = 0; c < cards.length; c++) {
+            cards[c].call(calls[x]);
+        }
+        cards = cards.filter(card => !card.isWinner);
+        if (cards.length === 1) {
+            losingCard = cards[0];
+        } else if (cards.length === 0) {
+            losingNumber = calls[x];
+            break;
+        }
+    }
+
+    expect(losingNumber * losingCard.score).toBe(17388);
 
 });
